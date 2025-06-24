@@ -3,6 +3,8 @@ import TaskRouter from './routes/tasks.route';
 import UnknownRouter from './routes/unknow.route';
 
 const server = express();
+const PORT = 3000;
+server.use(express.json())
 
 // Endpoints para rutas de la funcionalidad CRUD de Tasks (tareas)
 server.use('/api/tasks', TaskRouter);
@@ -11,6 +13,6 @@ server.use('/api/tasks', TaskRouter);
 server.use(UnknownRouter);
 
 // Inicialización del servidor express
-server.listen(3000, () => {
-  console.log('Servidor ejecutandose en el Puerto 3000...');
+server.listen(PORT, () => {
+  console.log(`Servidor ejecutandose en el Puerto ${PORT}...`);
 });
