@@ -1,10 +1,15 @@
 import express, { NextFunction, Request, Response } from 'express';
 import TaskRouter from './routes/tasks.route';
 import UnknownRouter from './routes/unknow.route';
+import { InLogger, OutLogger } from './middlewares/logger.middleware';
 
 const server = express();
 const PORT = 3000;
-server.use(express.json())
+server.use(express.json());
+
+// Middlewares para loggear cada petición entrante y saliente
+server.use(InLogger);
+server.use(OutLogger);
 
 // Endpoints para rutas de la funcionalidad CRUD de Tasks (tareas)
 server.use('/api/tasks', TaskRouter);
