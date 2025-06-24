@@ -65,3 +65,7 @@ dist/
 
 # TypeScript
 tsconfig.tsbuildinfo
+
+# Extensions config files
+.prettierrc.json
+api_test.http
