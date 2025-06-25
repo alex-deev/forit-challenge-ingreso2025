@@ -73,5 +73,6 @@ function createTask(json: any): Task {
     createdAt === undefined
   )
     throw new Error(`Se esperaba una Task: {id,title,description,completed,createdAt}`);
-  return { id, title, description, completed, createdAt };
+  const actualDate = new Date();
+  return { id, title, description, completed, createdAt: actualDate };
 }
