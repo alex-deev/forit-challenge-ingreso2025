@@ -1,10 +1,12 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
+import cors from 'cors';
 import TaskRouter from './routes/tasks.route';
 import UnknownRouter from './routes/unknow.route';
 import { InLogger, OutLogger } from './middlewares/logger.middleware';
 
 const server = express();
 const PORT = 3000;
+server.use(cors());
 server.use(express.json());
 
 // Middlewares para loggear cada petición entrante y saliente
