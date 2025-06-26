@@ -14,7 +14,9 @@ export default function TaskRow(props: { task: Task }) {
       >
         {title}
       </th>
-      <td className="px-6 py-4">{description}</td>
+      <td className="px-6 py-4">
+        <span className="line-clamp-3 whitespace-pre-wrap">{description}</span>
+      </td>
       <td className="px-6 py-4">
         <CompleteBadge isCompleted={completed} />
       </td>
