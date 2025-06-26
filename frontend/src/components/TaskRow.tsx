@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { getDnT } from "../utils/dates";
 import type { Task } from "../models/Task.model";
 import CompleteBadge from "./CompleteBadge";
+import { Button } from "./Button";
 
 export default function TaskRow(props: { task: Task }) {
   const { id, title, description, completed, createdAt } = props.task;
@@ -15,8 +16,7 @@ export default function TaskRow(props: { task: Task }) {
       </th>
       <td className="px-6 py-4">{description}</td>
       <td className="px-6 py-4">
-        {" "}
-        <CompleteBadge isCompleted={completed} />{" "}
+        <CompleteBadge isCompleted={completed} />
       </td>
       <td className="px-6 py-4">{getDnT(createdAt)}</td>
       <td className="px-6 py-4 text-right">
@@ -24,7 +24,7 @@ export default function TaskRow(props: { task: Task }) {
           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
           to={`/item/${id}`}
         >
-          Ver
+          <Button text="Ver más" />
         </Link>
       </td>
     </tr>
