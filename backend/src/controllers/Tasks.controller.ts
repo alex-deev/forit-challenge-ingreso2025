@@ -18,7 +18,7 @@ export function get(req: Request, res: Response) {
 export function post(req: Request, res: Response) {
   const content = req.body;
   
-  const newTask: Task = createTask(content);
+  const newTask: Task = createTask(content, tasks.length.toString());
   tasks.push(newTask);
   res.send(tasks);
 }
@@ -63,7 +63,7 @@ function indexOfTask(id: string): number {
 /**
  * Devuelve un objeto tipo Task a partir de un objeto JSON.
  */
-function createTask(json: any): Task {
+function createTask(json: any, newId?: string): Task {
   const { id, title, description, completed, createdAt } = json;
   if (
     id === undefined ||
@@ -71,8 +71,10 @@ function createTask(json: any): Task {
     description === undefined ||
     completed === undefined ||
     createdAt === undefined
-  )
+  ) {
     throw new Error(`Se esperaba una Task: {id,title,description,completed,createdAt}`);
+  }
+  const actualId = newId ? newId : id;
   const actualDate = new Date();
-  return { id, title, description, completed, createdAt: actualDate };
+  return { id: actualId, title, description, completed, createdAt: actualDate };
 }
