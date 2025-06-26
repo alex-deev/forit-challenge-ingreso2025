@@ -20,7 +20,7 @@ export default function TaskData() {
   return (
     <>
       <h2 className="mb-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-        Crear/modifcar Tarea
+        Tarea
       </h2>
       {currentTask ? (
         <TaskForm task={currentTask} />

@@ -16,7 +16,7 @@ export default function TaskContent(props: { task: Task }) {
         </h5>
         <CompleteBadge isCompleted={completed} />
       </div>
-      <p className="mb-10 font-normal text-lg">{description}</p>
+      <p className="mb-10 font-normal text-lg text-gray-900 dark:text-white">{description}</p>
       <div className="flex items-center justify-between">
         <Button text="Volver" onCLick={() => navigate('/')}/>
         <span className="text-gray-900 dark:text-gray-400 text-sm self-end">
@@ -25,7 +25,7 @@ export default function TaskContent(props: { task: Task }) {
         <Link to={`/form/${id}`}>
           <Button text="Editar">
             <svg
-              className="inline ms-2 w-6 h-6 text-gray-800 dark:text-white"
+              className="inline ms-2 w-6 h-6 text-gray-800 text-white"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"

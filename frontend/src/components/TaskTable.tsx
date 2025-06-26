@@ -26,7 +26,7 @@ export default function TaskTable(props: { tasks: Task[] }) {
             </th>
             <th scope="col" className="text-center py-2">
               <Button
-                text="Añadir"
+                text="Crear tarea"
                 color="green"
                 onCLick={() => navigate("/form")}
               />
@@ -39,6 +39,11 @@ export default function TaskTable(props: { tasks: Task[] }) {
           ))}
         </tbody>
       </table>
+      {(tasks.length === 0) && (
+        <div className="py-6 text-lg font-bold text-center bg-white dark:bg-gray-800">
+          No tienes ninguana tarea!
+        </div>
+      )}
     </div>
   );
 }
