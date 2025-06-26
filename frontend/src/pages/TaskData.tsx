@@ -23,9 +23,9 @@ export default function TaskData() {
         Crear/modifcar Tarea
       </h2>
       {currentTask ? (
-        <TaskForm isNew={false} task={currentTask} />
+        <TaskForm task={currentTask} />
       ) : (
-        <TaskForm isNew={true} />
+        <TaskForm />
       )}
     </>
   );
