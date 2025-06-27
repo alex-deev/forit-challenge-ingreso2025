@@ -20,6 +20,10 @@ server.use('/api/tasks', TaskRouter);
 server.use(UnknownRouter);
 
 // Inicialización del servidor express
-server.listen(PORT, () => {
-  console.log(`Servidor ejecutandose en el Puerto ${PORT}...`);
-});
+server
+  .listen(PORT, () => {
+    console.log(`El servidor se está iniciando en el PUERTO ${PORT}...`);
+  })
+  .on('error', () => {
+    console.error(`El servidor se detuvo! Verfica si el PUERTO ${PORT} está libre!`);
+  });
