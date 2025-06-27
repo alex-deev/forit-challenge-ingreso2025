@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+
+:root {
+  background: var(--color-slate-900);
+  color: var(--color-slate-100);
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    background: var(--color-slate-100);
+  }
+}
