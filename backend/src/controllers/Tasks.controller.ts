@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Task } from '../models/Task.model';
 
 const tasks: Array<Task> = [];
+let id_trace: number = 0;
 
 /**
  * GET | devuelve todas las tareas en formato JSON.
@@ -18,7 +19,7 @@ export function get(req: Request, res: Response) {
 export function post(req: Request, res: Response) {
   const content = req.body;
   
-  const newTask: Task = createTask(content, tasks.length.toString());
+  const newTask: Task = createTask(content, String(id_trace++));
   tasks.push(newTask);
   res.send(tasks);
 }
