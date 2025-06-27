@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc --build",
     "start": "tsc --build && node ./dist/server.js",
+    "deploy": "node --env-file=.env ./dist/server.js",
     "dev": "nodemon ./src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -6,6 +6,7 @@ import TextArea from "./TextArea";
 import { useNavigate } from "react-router-dom";
 import Checkbox from "./Checkbox";
 import CompleteBadge from "./CompleteBadge";
+import { api_base_url } from "../contexts/TasksContext";
 
 export default function TaskForm(props: { task?: Task }) {
   const { task } = props;
@@ -39,7 +40,7 @@ export default function TaskForm(props: { task?: Task }) {
         completed: false,
         createdAt: new Date(),
       };
-      fetch(`http://localhost:3000/api/tasks`, {
+      fetch(`${api_base_url}/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +58,7 @@ export default function TaskForm(props: { task?: Task }) {
         completed: completed,
         createdAt: task.createdAt,
       };
-      fetch(`http://localhost:3000/api/tasks/${task!.id}`, {
+      fetch(`${api_base_url}/${task!.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -70,11 +71,11 @@ export default function TaskForm(props: { task?: Task }) {
     }
   }
   function handleDelete() {
-    fetch(`http://localhost:3000/api/tasks/${task!.id}`, {
+    fetch(`${api_base_url}/${task!.id}`, {
       method: "DELETE",
     }).then((res) => {
-        console.log(`-> DELETE status: ${res.statusText}`);
-        navigate('/');
+      console.log(`-> DELETE status: ${res.statusText}`);
+      navigate("/");
     });
   }
 

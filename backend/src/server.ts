@@ -5,7 +5,7 @@ import UnknownRouter from './routes/unknow.route';
 import { InLogger, OutLogger } from './middlewares/logger.middleware';
 
 const server = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 server.use(cors());
 server.use(express.json());
 
