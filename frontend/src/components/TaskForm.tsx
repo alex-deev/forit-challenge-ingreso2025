@@ -58,7 +58,7 @@ export default function TaskForm(props: { task?: Task }) {
         completed: completed,
         createdAt: task.createdAt,
       };
-      fetch(`${api_base_url}/${task!.id}`, {
+      fetch(`${api_base_url}/tasks/${task!.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export default function TaskForm(props: { task?: Task }) {
     }
   }
   function handleDelete() {
-    fetch(`${api_base_url}/${task!.id}`, {
+    fetch(`${api_base_url}/tasks/${task!.id}`, {
       method: "DELETE",
     }).then((res) => {
       console.log(`-> DELETE status: ${res.statusText}`);
