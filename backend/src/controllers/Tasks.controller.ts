@@ -1,15 +1,14 @@
 import { Request, Response } from 'express';
 import { Task } from '../models/Task.model';
-
-const tasks: Array<Task> = [];
-let id_trace: number = 0;
+import { deleteTask, getTasks, insertTask, updateTask } from '../database/statements';
 
 /**
  * GET | devuelve todas las tareas en formato JSON.
  */
 export function get(req: Request, res: Response) {
-  res.setHeader('Content-Type', 'application/json')
-  res.status(200).send(JSON.stringify(tasks));
+  const tasksJson = JSON.stringify(getTasks());
+  res.setHeader('Content-Type', 'application/json');
+  res.status(200).send(tasksJson);
 }
 
 /**
@@ -19,9 +18,10 @@ export function get(req: Request, res: Response) {
 export function post(req: Request, res: Response) {
   const content = req.body;
   
-  const newTask: Task = createTask(content, String(id_trace++));
-  tasks.push(newTask);
-  res.send(tasks);
+  const newTask: Task = createTask(content);
+  insertTask(newTask);
+
+  res.sendStatus(200);
 }
 
 /**
@@ -33,10 +33,10 @@ export function put(req: Request, res: Response) {
   const id = req.params.id;
   const content = req.body;
 
-  const index = indexOfTask(id);
-  const updatedTask: Task = createTask(content);
-  tasks[index] = updatedTask;
-  res.send(tasks);
+  const updatedTask: Task = createTask(content, id);
+  updateTask(updatedTask);
+
+  res.sendStatus(200);
 }
 
 /**
@@ -46,19 +46,9 @@ export function put(req: Request, res: Response) {
 export function remove(req: Request, res: Response) {
   const id = req.params.id;
 
-  const index = indexOfTask(id);
-  tasks.splice(index, 1);
-  res.send(tasks);
-}
-
-/**
- * Busca y deveulve la posición de la Task en el listado.
- */
-function indexOfTask(id: string): number {
-  const index = tasks.findIndex(task => task.id == id);
-  if (index === -1) 
-    throw new Error(`Task con id: ${id} no existe!`);
-  return index;
+  deleteTask(id);
+  
+  res.sendStatus(200);
 }
 
 /**

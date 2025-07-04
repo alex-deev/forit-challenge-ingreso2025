@@ -3,7 +3,7 @@ import { getNowDate, getNowDnT, getNowTime } from '../utils/dates';
 
 
 // Debe ser el primer middleware
-export function InLogger(req: Request, res: Response, next: NextFunction) {
+export function inLogger(req: Request, res: Response, next: NextFunction) {
   let { method, originalUrl } = req;
   if (method === 'DELETE') method = 'DEL';
   const msg = `\x1b[33m-> ${method}\x1b[0m\t${originalUrl}\t${getNowDnT()}`;
@@ -12,7 +12,7 @@ export function InLogger(req: Request, res: Response, next: NextFunction) {
 }
 
 // Debe ser el útlimo middleware
-export function OutLogger(req: Request, res: Response, next: NextFunction) {
+export function outLogger(req: Request, res: Response, next: NextFunction) {
   res.on('finish', () => {
     const finalStatus = res.statusCode;
     const msg = `\x1b[33m<------\t${finalStatus}\x1b[0m`;
@@ -20,5 +20,3 @@ export function OutLogger(req: Request, res: Response, next: NextFunction) {
   });
   next();
 }
-
-export default InLogger;
