@@ -3,6 +3,7 @@ import cors from 'cors';
 import TaskRouter from './routes/tasks.route';
 import UnknownRouter from './routes/unknow.route';
 import { InLogger, OutLogger } from './middlewares/logger.middleware';
+import { createTasksTable } from './database/statements';
 
 const server = express();
 const PORT = process.env.PORT || 3000;
@@ -23,6 +24,7 @@ server.use(UnknownRouter);
 server
   .listen(PORT, () => {
     console.log(`El servidor se está iniciando en el PUERTO ${PORT}...`);
+    createTasksTable();
   })
   .on('error', () => {
     console.error(`El servidor se detuvo! Verfica si el PUERTO ${PORT} está libre!`);
