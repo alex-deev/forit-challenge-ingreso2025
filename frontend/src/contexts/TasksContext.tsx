@@ -3,7 +3,7 @@ import { toArrayOfTask, type Task } from "../models/Task.model";
 
 console.log(import.meta.env.MODE);
 export let api_base_url: string;
-if (import.meta.env.MODE === "devlopment") {
+if (import.meta.env.MODE === "development") {
   api_base_url = "http://localhost:3000/api";
 } else {
   api_base_url = import.meta.env.VITE_API_BASE_URL;
