@@ -2,11 +2,11 @@ import { createContext, useEffect, useState } from "react";
 import { toArrayOfTask, type Task } from "../models/Task.model";
 
 console.log(import.meta.env.MODE);
-export let api_base_url: string;
+export let API_BASE_URL: string;
 if (import.meta.env.MODE === "development") {
-  api_base_url = "http://localhost:3000/api";
+  API_BASE_URL = "http://localhost:3000/api";
 } else {
-  api_base_url = import.meta.env.VITE_API_BASE_URL;
+  API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 }
 
 type TasksContextProviderProps = {
@@ -39,7 +39,7 @@ export default function TasksContextProvider({
     return parsedTasks;
   }
   const refetch = () => {
-    fetch(`${api_base_url}/tasks`)
+    fetch(`${API_BASE_URL}/tasks`)
       .then((res) => res.json())
       .then((json) => {
         const processedTasks = parseTasksData(json);
