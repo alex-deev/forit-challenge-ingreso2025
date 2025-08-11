@@ -72,3 +72,4 @@ api_test.http
 
 # SQLite3
 src/database/*.db*
+statements.sql

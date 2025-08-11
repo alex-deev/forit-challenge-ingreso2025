@@ -1,12 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import TaskRouter from './routes/tasks.route';
-import UnknownRouter from './routes/unknow.route';
+import CommonRouter from './routes/common.router';
 import { inLogger, outLogger } from './middlewares/logger.middleware';
 import { createTasksTable } from './database/statements';
 
-const server = express();
 const PORT = process.env.PORT || 3000;
+const server = express();
 server.use(cors());
 server.use(express.json());
 
@@ -18,7 +18,7 @@ server.use(outLogger);
 server.use('/api/tasks', TaskRouter);
 
 // Endpoint para rutas no definidas
-server.use(UnknownRouter);
+server.use(CommonRouter);
 
 // Inicialización del servidor express
 server

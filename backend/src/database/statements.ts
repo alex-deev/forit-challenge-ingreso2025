@@ -7,6 +7,7 @@ const dbLocation = './src/database/database.db';
 const db: Database = new DatabaseConstructor(dbLocation);
 db.pragma('journal_mode = WAL');
 
+/** Crea la tabla para almacenar los registros de tareas */
 export function createTasksTable() {
   const sql = `
     CREATE TABLE IF NOT EXISTS tasks (
@@ -20,6 +21,7 @@ export function createTasksTable() {
   db.prepare(sql).run();
 }
 
+/** Inserta una tarea en la tabla de tareas */
 export function insertTask(task: Task) {
   const sql = `
     INSERT INTO tasks (title, description, completed, created_at)
@@ -29,6 +31,7 @@ export function insertTask(task: Task) {
   db.prepare(sql).run(plainTask);
 }
 
+/** Actualiza una tarea dentro de la tabla de tareas */
 export function updateTask(task: Task) {
   const sql = `
     UPDATE tasks SET 
@@ -43,6 +46,7 @@ export function updateTask(task: Task) {
   db.prepare(sql).run({...plainTask, targetId});
 }
 
+/** Elimina una tarea específica de la tabla de tareas */
 export function deleteTask(id: string) {
   const sql = `
   DELETE FROM tasks
@@ -51,6 +55,7 @@ export function deleteTask(id: string) {
   db.prepare(sql).run(id);
 }
 
+/** Obtiene una tarea específica de la tabla de tareas */
 export function getTask(id: string) {
   const sql = `
     SELECT * FROM tasks
@@ -60,6 +65,7 @@ export function getTask(id: string) {
   return res as Task;
 }
 
+/** Obtiene todas las tareas de la tabla de tareas */
 export function getTasks() {
   const sql = `
     SELECT id, title, description, completed, created_at as createdAt FROM tasks
@@ -68,7 +74,7 @@ export function getTasks() {
   return rows as Task[];
 }
 
-
+/** Devuelve un objeto simplificado a parit de una tarea. Asegura que todos sus campos sean de tipo string (necesario para SQLite) */
 function flattenTask(task: Task) {
   const { title, description, completed, createdAt } = task;
   return {
