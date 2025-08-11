@@ -6,8 +6,9 @@ export default function Input(props: {
   required?: boolean;
   label: string;
   placeholder: string;
+  maxLength?: number;
 }) {
-  const { className, value, onChange, name, required, label, placeholder } =
+  const { className, value, onChange, name, required, label, placeholder, maxLength } =
     props;
 
   return (
@@ -27,6 +28,7 @@ export default function Input(props: {
         required={required}
         value={value}
         onChange={onChange}
+        maxLength={maxLength}
       />
     </div>
   );

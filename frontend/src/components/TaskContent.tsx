@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import type { Task } from "../models/Task.model";
-import { getDate, getTime } from "../utils/dates";
+import { getDate, getTime } from "../utils/common";
 import CompleteBadge from "./CompleteBadge";
 import { Button } from "./Button";
 
@@ -11,12 +11,12 @@ export default function TaskContent(props: { task: Task }) {
   return (
     <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
       <div className="flex items-center justify-between mb-10">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <h5 className="mb-2 me-8 text-xl font-bold tracking-tight text-gray-900 dark:text-white break-all">
           {title}
         </h5>
         <CompleteBadge isCompleted={completed} />
       </div>
-      <p className="mb-10 font-normal text-lg text-gray-900 dark:text-white whitespace-pre-wrap">{description}</p>
+      <p className="mb-10 font-normal text-lg text-gray-900 dark:text-white whitespace-pre-wrap break-words">{description}</p>
       <div className="flex items-center justify-between">
         <Button text="Volver" onCLick={() => navigate('/')}/>
         <span className="text-gray-900 dark:text-gray-400 text-sm self-end">

@@ -5,9 +5,10 @@ export default function TextArea(props: {
   name?: string;
   required?: boolean;
   label: string;
+  maxLength?: number;
   placeholder: string;
 }) {
-  const { className, value, onChange, name, required, label, placeholder } =
+  const { className, value, onChange, name, required, label, placeholder, maxLength } =
     props;
 
   return (
@@ -25,6 +26,7 @@ export default function TextArea(props: {
         required={required}
         value={value}
         onChange={onChange}
+        maxLength={maxLength}
       ></textarea>
     </div>
   );

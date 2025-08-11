@@ -26,3 +26,13 @@ function formatDigit(digit: number) {
   else
     return `0${digit}`;
 }
+
+
+/** Recorta cadena de caracteres */
+export function truncString(str: string, maxLength: number): string {
+  if (str.length <= maxLength) {
+    return str; // No se necesita recortar
+  }
+
+  return str.substring(0, maxLength);
+}
