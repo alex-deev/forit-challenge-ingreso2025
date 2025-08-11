@@ -6,10 +6,10 @@ import type { Task } from "../models/Task.model";
 
 export default function TaskItem() {
   const { id } = useParams();
-  const { tasks, refetch } = useContext(TasksContext) as TasksContextType;
+  const { tasks,  fetchData } = useContext(TasksContext) as TasksContextType;
   const currentTask = findTask(id);
   
-  useEffect(refetch, []);
+  useEffect(fetchData, []); // Actualiza los datos de las tareas
 
   function findTask(id: string | undefined): Task | undefined {
     const index = tasks.findIndex((task) => task.id === id);

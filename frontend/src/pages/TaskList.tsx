@@ -1,13 +1,13 @@
 import { useContext, useEffect } from "react";
 import TaskTable from "../components/TaskTable";
-import { TasksContext } from "../contexts/TasksContext";
+import { TasksContext, type TasksContextType } from "../contexts/TasksContext";
 
 export default function TaskList() {
-  const tasksContext = useContext(TasksContext);
+  const { tasks, fetchData } = useContext(TasksContext) as TasksContextType;
 
-  useEffect(() => tasksContext?.refetch(), []);
+  useEffect(fetchData, []); // Actualiza los datos de las tareas
 
-  if (!tasksContext) {
+  if (tasks.length === 0) {
     return <span>NO HAY DATOS!</span>
   } else {
     return (
@@ -15,7 +15,7 @@ export default function TaskList() {
         <h2 className="mb-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
           Todas las tareas
         </h2>
-        <TaskTable tasks={tasksContext.tasks} />
+        <TaskTable tasks={tasks} />
       </>
     );
   }

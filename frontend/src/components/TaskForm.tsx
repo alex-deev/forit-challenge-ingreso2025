@@ -1,46 +1,46 @@
 import { useState } from "react";
-import type { Task } from "../models/Task.model";
-import { truncString } from "../utils/common";
 import { Button } from "./Button";
-import Input from "./Input";
-import TextArea from "./TextArea";
-import { useNavigate } from "react-router-dom";
-import Checkbox from "./Checkbox";
 import CompleteBadge from "./CompleteBadge";
-import { API_BASE_URL } from "../contexts/TasksContext";
+import Checkbox from "./Checkbox";
+import TextArea from "./TextArea";
+import Input from "./Input";
+import { truncString } from "../utils/common";
+import type { Task } from "../models/Task.model";
 
+type HandleCreateTask = (task: Task) => void;
+type HandleUpdateTask = (task: Task) => void;
+type HandleDeleteTask = (id: string) => void;
+type HandleCancelOperation = () => void;
 
-export default function TaskForm(props: { task?: Task }) {
-  const { task } = props;
-  const navigate = useNavigate();
+export default function TaskForm(props: {
+  task?: Task;
+  onCreateTask: HandleCreateTask;
+  onUpdateTask: HandleUpdateTask;
+  onDeleteTask: HandleDeleteTask;
+  onCancelOperation: HandleCancelOperation;
+}) {
+  const { task, onCreateTask, onUpdateTask, onDeleteTask, onCancelOperation } = props;
 
   const titleMaxSize = 80;
   const descriptionMaxSize = 2000;
 
-  const [title, setTitle] = useState<string>(
-    task?.title || ""
-  );
+  const [title, setTitle] = useState<string>(task?.title || "");
   const [description, setDescription] = useState<string>(
     task?.description || ""
   );
-  const [completed, setCompleted] = useState<boolean>(
-    task?.completed || false
-  );
-
+  const [completed, setCompleted] = useState<boolean>(task?.completed || false);
 
   function handleTitleEdition(event: React.ChangeEvent<HTMLInputElement>) {
     setTitle(event.target.value);
   }
-  
+
   function handleDescriptionEdition(
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) {
     setDescription(event.target.value);
   }
-  
-  function handleCompletedEdition(
-    event: React.ChangeEvent<HTMLInputElement>
-  ) {
+
+  function handleCompletedEdition(event: React.ChangeEvent<HTMLInputElement>) {
     setCompleted(event.target.checked);
   }
 
@@ -50,9 +50,9 @@ export default function TaskForm(props: { task?: Task }) {
     const formTask: Task = {
       // existe task  ?  si, la actualiza  :  no, crea una nueva
       id: task ? task.id : "",
-      title: truncString(title, titleMaxSize),  // asegura que el titulo no exeda el largo máximo
-      description: truncString(description, descriptionMaxSize),  // asegura que la descripcion no exeda el largo máximo
-      completed: task ? task.completed : false,
+      title: truncString(title, titleMaxSize), // asegura que el titulo no exeda el largo máximo
+      description: truncString(description, descriptionMaxSize), // asegura que la descripcion no exeda el largo máximo
+      completed: completed,
       createdAt: task ? task.createdAt : new Date(),
     };
     return formTask;
@@ -62,41 +62,17 @@ export default function TaskForm(props: { task?: Task }) {
     event.preventDefault();
     if (!task) {
       const newTask = formulateTask();
-      fetch(`${API_BASE_URL}/tasks`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTask),
-      }).then((res) => {
-        console.log(`-> POST status: ${res.statusText}`);
-        navigate(`/`);
-      });
+      onCreateTask(newTask);
     } else {
-      const newTask = formulateTask(task)
-      fetch(`${API_BASE_URL}/tasks/${task!.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTask),
-      }).then((res) => {
-        console.log(`-> PUT status: ${res.statusText}`);
-        navigate(`/item/${task!.id}`);
-      });
+      const updatedTask = formulateTask(task);
+      onUpdateTask(updatedTask);
     }
   }
-  
+
   function handleDelete() {
-    fetch(`${API_BASE_URL}/tasks/${task!.id}`, {
-      method: "DELETE",
-    }).then((res) => {
-      console.log(`-> DELETE status: ${res.statusText}`);
-      navigate("/");
-    });
+    onDeleteTask(`${task!.id}`)
   }
 
-  
   if (!task) {
     // Si no se recibe una Task, se muestra el form para crear una nueva
     return (
@@ -129,7 +105,7 @@ export default function TaskForm(props: { task?: Task }) {
             <div className="mt-8 flex gap-4 sm:gap-6 justify-between">
               <Button
                 text="Cancelar"
-                onCLick={() => navigate("/")}
+                onCLick={onCancelOperation}
                 type="button"
               />
               <Button text="Crear tarea" color="green" type="submit" />
@@ -178,7 +154,7 @@ export default function TaskForm(props: { task?: Task }) {
             <div className="mt-8 flex gap-4 sm:gap-6 justify-between">
               <Button
                 text="Cancelar"
-                onCLick={() => navigate(`/item/${task!.id}`)}
+                onCLick={onCancelOperation}
                 type="button"
               />
               <div className="flex gap-4">
