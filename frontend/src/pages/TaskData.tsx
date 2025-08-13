@@ -23,15 +23,21 @@ export default function TaskData() {
 
   function onCreateTask(task: Task) {
     postData(task); // Envía la nueva tarea al backend para guardarla
-    navigate(`/`); // Despues de crear la tarea vuelve al listado completo de tareas
+    setTimeout(() => {
+      navigate(`/`); // Despues de crear la tarea vuelve al listado completo de tareas
+    }, 100);
   }
   function onUpdateTask(task: Task) {
     putData(task); // Envía la tarea al backend para actualizarla
-    navigate(`/item/${task!.id}`); // Despues de actualizar la tarea, vuleve mostrar su invormación detallada
+    setTimeout(() => {
+      navigate(`/item/${task!.id}`); // Despues de actualizar la tarea, vuleve mostrar su invormación detallada
+    }, 100);
   }
   function onDeleteTask(id: string) {
     deleteData(id); // Envía una peticion al backend para eliminar la tarea
-    navigate(`/`); // Despues de eliminar la tarea vuelve al listado completo de tareas
+    setTimeout(() => {
+      navigate(`/`); // Despues de eliminar la tarea vuelve al listado completo de tareas
+    }, 100);
   }
   function onCancel() {
     // Cancela la operación y vuelve a la pagina anterior

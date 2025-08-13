@@ -18,10 +18,10 @@ type TasksContextProviderProps = {
 export type TasksContextType = {
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
-  fetchData: () => void;
-  postData: (task: Task) => void;
-  putData: (task: Task) => void;
-  deleteData: (id: string) => void;
+  fetchData: () => Promise<void>;
+  postData: (task: Task) => Promise<void>;
+  putData: (task: Task) => Promise<void>;
+  deleteData: (id: string) => Promise<void>;
 };
 
 export const TasksContext = createContext<null | TasksContextType>(null);
@@ -33,7 +33,7 @@ export default function TasksContextProvider({
   const [tasks, setTasks] = useState<Task[]>([]);
 
   // GET request
-  const fetchData = () => {
+  const fetchData = async () => {
     fetch(`${API_BASE_URL}/tasks`)
       .then((res) => {
         console.log(`-> GET status: ${res.statusText}`);
@@ -47,7 +47,7 @@ export default function TasksContextProvider({
   };
 
   // POST request
-  const postData = (task: Task) => {
+  const postData = async (task: Task) => {
     const request = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -59,7 +59,7 @@ export default function TasksContextProvider({
   };
 
   // PUT request
-  const putData = (task: Task) => {
+  const putData = async (task: Task) => {
     const request = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -71,7 +71,7 @@ export default function TasksContextProvider({
   };
 
   // DELETE request
-  const deleteData = (id: string) => {
+  const deleteData = async (id: string) => {
     const request = {
       method: "DELETE",
     };

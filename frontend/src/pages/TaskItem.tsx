@@ -9,7 +9,9 @@ export default function TaskItem() {
   const { tasks,  fetchData } = useContext(TasksContext) as TasksContextType;
   const currentTask = findTask(id);
   
-  useEffect(fetchData, []); // Actualiza los datos de las tareas
+  useEffect(() => {
+    fetchData(); // Refresca la lista de tareas consultando la API
+  }, []);
 
   function findTask(id: string | undefined): Task | undefined {
     const index = tasks.findIndex((task) => task.id === id);
