@@ -1,0 +1,37 @@
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - push
+
+variables:
+  DOCKER_IMAGE_NAME_REACT: $CI_REGISTRY_IMAGE/web
+  DOCKER_IMAGE_NAME_NODE: $CI_REGISTRY_IMAGE/api
+
+build-job:
+  stage: build
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  script:
+    - echo "Building Docker images..."
+    - docker build -t $DOCKER_IMAGE_NAME_REACT:$CI_COMMIT_SHORT_SHA ./mi-app-web
+    - docker build -t $DOCKER_IMAGE_NAME_NODE:$CI_COMMIT_SHORT_SHA ./mi-api
+
+push-job:
+  stage: push
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  script:
+    - echo "Logging into GitLab Container Registry..."
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - echo "Pushing images to registry..."
+    - docker push $DOCKER_IMAGE_NAME_REACT:$CI_COMMIT_SHORT_SHA
+    - docker push $DOCKER_IMAGE_NAME_NODE:$CI_COMMIT_SHORT_SHA
+    - echo "Pushing latest tags..."
+    - docker tag $DOCKER_IMAGE_NAME_REACT:$CI_COMMIT_SHORT_SHA $DOCKER_IMAGE_NAME_REACT:latest
+    - docker tag $DOCKER_IMAGE_NAME_NODE:$CI_COMMIT_SHORT_SHA $DOCKER_IMAGE_NAME_NODE:latest
+    - docker push $DOCKER_IMAGE_NAME_REACT:latest
+    - docker push $DOCKER_IMAGE_NAME_NODE:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
