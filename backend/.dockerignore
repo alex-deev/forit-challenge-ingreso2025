@@ -6,3 +6,6 @@
 !/tsconfig.json
 !/tsconfig.tsbuidlinfo
 !/src
+
+# Ingnore sqlite database files
+/src/database/database*

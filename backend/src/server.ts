@@ -23,9 +23,9 @@ server.use(CommonRouter);
 // Inicialización del servidor express
 server
   .listen(PORT, () => {
-    console.log(`El servidor se está iniciando en el PUERTO ${PORT}...`);
+    console.log(`express: server is starting & listening on PORT ${PORT}...`);
     createTasksTable();
   })
   .on('error', () => {
-    console.error(`El servidor se detuvo! Verfica si el PUERTO ${PORT} está libre!`);
+    console.error(`express: server has stopped. Check if PORT ${PORT} is free.`);
   });

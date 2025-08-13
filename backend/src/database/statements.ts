@@ -1,10 +1,11 @@
 import DatabaseConstructor, { Database } from 'better-sqlite3';
 import { Task } from '../models/Task.model';
 
-const dbLocation = './src/database/database.db';
+const DB_LOCATION = '/sqlite/database.db';
+console.log(`express: server is setting up SQLite database in path '${DB_LOCATION}'`);
 
 // Si el archivo no existe, lo creará automáticamente
-const db: Database = new DatabaseConstructor(dbLocation);
+const db: Database = new DatabaseConstructor(DB_LOCATION);
 db.pragma('journal_mode = WAL');
 
 /** Crea la tabla para almacenar los registros de tareas */

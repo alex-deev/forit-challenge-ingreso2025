@@ -32,6 +32,10 @@ COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
 COPY --from=build $DIR/node_modules $DIR/node_modules
 COPY --from=build $DIR/dist $DIR/dist
 
+## Creates the sqlite directory where database will be stored
+RUN mkdir /sqlite
+RUN chown -R appuser:appgroup /sqlite
+
 ## Change the ownership of the application directory to the new user (security)
 RUN chown -R appuser:appgroup $DIR
 ## Switch to the non-root user (security)
