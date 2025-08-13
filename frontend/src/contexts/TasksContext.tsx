@@ -7,7 +7,9 @@ console.log(`Application in ${APP_MODE} mode...`);
 const API_BASE_URL =
   APP_MODE === "development"
     ? "http://localhost:3000/api"
-    : import.meta.env.VITE_API_BASE_URL;
+    : window.config.APP_EXTERNAL_API_URL;
+
+console.log(`Conectando API: ${API_BASE_URL}`);
 
 type TasksContextProviderProps = {
   children: React.ReactNode;
