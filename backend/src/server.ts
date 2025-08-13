@@ -5,7 +5,7 @@ import CommonRouter from './routes/common.router';
 import { inLogger, outLogger } from './middlewares/logger.middleware';
 import { createTasksTable } from './database/statements';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.APP_PORT || 3000;
 const server = express();
 server.use(cors());
 server.use(express.json());
