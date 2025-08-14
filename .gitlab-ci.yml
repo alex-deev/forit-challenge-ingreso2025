@@ -29,7 +29,7 @@ push-job:
     - docker:24.0.5-dind
   script:
     - echo "Logging into GitLab Container Registry..."
-    - docker login -u $CI_JOB_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - echo "$CI_DEPLOY_PASSWORD" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin
 
     - docker load < image-frontend.tar
     - docker load < image-backend.tar
