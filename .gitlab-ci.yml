@@ -1,0 +1,48 @@
+stages: # List of stages for jobs, and their order of execution
+  - build
+  - push
+
+variables:
+  IMAGE_NAME_FRONTEND: $CI_REGISTRY_IMAGE/frontend
+  IMAGE_NAME_BACKEND: $CI_REGISTRY_IMAGE/backend
+
+build-job:
+  stage: build
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  script:
+    - echo "Building Docker images..."
+    - docker build -t $IMAGE_NAME_FRONTEND:$CI_COMMIT_SHORT_SHA ./frontend
+    - docker build -t $IMAGE_NAME_BACKEND:$CI_COMMIT_SHORT_SHA ./backend
+    - docker save $IMAGE_NAME_FRONTEND > image-frontend.tar
+    - docker save $IMAGE_NAME_BACKEND > image-backend.tar
+  artifacts:
+    paths:
+      - image-frontend.tar
+      - image-backend.tar
+
+push-job:
+  stage: push
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  script:
+    - echo "Logging into GitLab Container Registry..."
+    - echo "$CI_DEPLOY_PASSWORD" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin
+
+    - docker load < image-frontend.tar
+    - docker load < image-backend.tar
+
+    - echo "Pushing images to registry..."
+    - docker push $IMAGE_NAME_FRONTEND:$CI_COMMIT_SHORT_SHA
+    - docker push $IMAGE_NAME_BACKEND:$CI_COMMIT_SHORT_SHA
+
+    - echo "Pushing latest tags..."
+    - docker tag $IMAGE_NAME_FRONTEND:$CI_COMMIT_SHORT_SHA $IMAGE_NAME_FRONTEND:latest
+    - docker tag $IMAGE_NAME_BACKEND:$CI_COMMIT_SHORT_SHA $IMAGE_NAME_BACKEND:latest
+    - docker push $IMAGE_NAME_FRONTEND:latest
+    - docker push $IMAGE_NAME_BACKEND:latest
+
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

@@ -1,0 +1,41 @@
+services:
+
+  taskeep-frontend:
+    image: taskeep-frontend:0.1.4
+    build: ./frontend
+
+    depends_on:
+      - taskeep-backend
+
+    environment:
+      APP_EXTERNAL_API_URL: http://localhost:3000/api
+
+    ## opening ports (not recommended for production)
+    ports:
+      - 7000:80
+
+    ## use a reverse proxy
+    # networks:
+    #   - 
+
+
+  taskeep-backend:
+    image: taskeep-backend:0.2.4
+    build: ./backend
+
+    environment:
+      APP_PORT: 4500                          # default: 3000
+
+    ## opening ports (not recommended for production)
+    ports:
+      - 3000:4500
+
+    ## use a reverse proxy
+    # networks:
+    #   - 
+
+    volumes:
+      - taskeep-sqlite-data:/sqlite:rw  # Store sqlite dabase in volume
+
+volumes:
+  taskeep-sqlite-data:

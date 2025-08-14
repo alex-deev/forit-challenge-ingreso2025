@@ -69,3 +69,7 @@ tsconfig.tsbuildinfo
 # Extensions config files
 .prettierrc.json
 api_test.http
+
+# SQLite3
+src/database/*.db*
+statements.sql

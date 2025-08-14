@@ -1,0 +1,15 @@
+# Ignore everything unless explicitly added
+*
+
+!/package.json
+!/package-lock.json
+!/tsconfig.json
+!/tsconfig.app.json
+!/tsconfig.node.json
+!/tsconfig.tsbuidlinfo
+!/index.html
+!/src
+!/public
+!/nginx.conf
+!/vite.config.ts
+!/docker-entrypoint.sh

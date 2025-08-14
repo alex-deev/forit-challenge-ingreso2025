@@ -31,9 +31,9 @@ export function toTask(obj: any): Task | undefined {
   }
 
   const verifiedTask: Task = {
-    id: obj.id,
-    title: obj.title,
-    description: obj.description,
+    id: String(obj.id),
+    title: String(obj.title),
+    description: String(obj.description),
     completed: String(obj.completed).toLowerCase() === 'true',
     createdAt: createdAtDate
   } 

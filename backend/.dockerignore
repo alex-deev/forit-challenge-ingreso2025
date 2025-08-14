@@ -1,0 +1,11 @@
+# Ignore everything unless explicitly added
+*
+
+!/package.json
+!/package-lock.json
+!/tsconfig.json
+!/tsconfig.tsbuidlinfo
+!/src
+
+# Ingnore sqlite database files
+/src/database/database*

@@ -1,15 +1,28 @@
 import { useState } from "react";
-import type { Task } from "../models/Task.model";
 import { Button } from "./Button";
-import Input from "./Input";
-import TextArea from "./TextArea";
-import { useNavigate } from "react-router-dom";
-import Checkbox from "./Checkbox";
 import CompleteBadge from "./CompleteBadge";
+import Checkbox from "./Checkbox";
+import TextArea from "./TextArea";
+import Input from "./Input";
+import { truncString } from "../utils/common";
+import type { Task } from "../models/Task.model";
 
-export default function TaskForm(props: { task?: Task }) {
-  const { task } = props;
-  const navigate = useNavigate();
+type HandleCreateTask = (task: Task) => void;
+type HandleUpdateTask = (task: Task) => void;
+type HandleDeleteTask = (id: string) => void;
+type HandleCancelOperation = () => void;
+
+export default function TaskForm(props: {
+  task?: Task;
+  onCreateTask: HandleCreateTask;
+  onUpdateTask: HandleUpdateTask;
+  onDeleteTask: HandleDeleteTask;
+  onCancelOperation: HandleCancelOperation;
+}) {
+  const { task, onCreateTask, onUpdateTask, onDeleteTask, onCancelOperation } = props;
+
+  const titleMaxSize = 80;
+  const descriptionMaxSize = 2000;
 
   const [title, setTitle] = useState<string>(task?.title || "");
   const [description, setDescription] = useState<string>(
@@ -20,62 +33,44 @@ export default function TaskForm(props: { task?: Task }) {
   function handleTitleEdition(event: React.ChangeEvent<HTMLInputElement>) {
     setTitle(event.target.value);
   }
+
   function handleDescriptionEdition(
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) {
     setDescription(event.target.value);
   }
+
   function handleCompletedEdition(event: React.ChangeEvent<HTMLInputElement>) {
     setCompleted(event.target.checked);
+  }
+
+  /** Crea o modifica una tarea. Si se provee una tarea como parámetro, devuleve la misma pero con title,
+   *  description y completed actualizados. De otra forma, crea una tarea con valor por defecto. */
+  function formulateTask(task?: Task) {
+    const formTask: Task = {
+      // existe task  ?  si, la actualiza  :  no, crea una nueva
+      id: task ? task.id : "",
+      title: truncString(title, titleMaxSize), // asegura que el titulo no exeda el largo máximo
+      description: truncString(description, descriptionMaxSize), // asegura que la descripcion no exeda el largo máximo
+      completed: completed,
+      createdAt: task ? task.createdAt : new Date(),
+    };
+    return formTask;
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!task) {
-      const taskEdit: Task = {
-        id: "",
-        title: title,
-        description: description,
-        completed: false,
-        createdAt: new Date(),
-      };
-      fetch(`http://localhost:3000/api/tasks`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(taskEdit),
-      }).then((res) => {
-        console.log(`-> POST status: ${res.statusText}`);
-        navigate(`/`);
-      });
+      const newTask = formulateTask();
+      onCreateTask(newTask);
     } else {
-      const taskEdit: Task = {
-        id: task.id,
-        title: title,
-        description: description,
-        completed: completed,
-        createdAt: task.createdAt,
-      };
-      fetch(`http://localhost:3000/api/tasks/${task!.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(taskEdit),
-      }).then((res) => {
-        console.log(`-> PUT status: ${res.statusText}`);
-        navigate(`/item/${task!.id}`);
-      });
+      const updatedTask = formulateTask(task);
+      onUpdateTask(updatedTask);
     }
   }
+
   function handleDelete() {
-    fetch(`http://localhost:3000/api/tasks/${task!.id}`, {
-      method: "DELETE",
-    }).then((res) => {
-        console.log(`-> DELETE status: ${res.statusText}`);
-        navigate('/');
-    });
+    onDeleteTask(`${task!.id}`)
   }
 
   if (!task) {
@@ -95,6 +90,7 @@ export default function TaskForm(props: { task?: Task }) {
                 required={true}
                 value={title}
                 onChange={handleTitleEdition}
+                maxLength={titleMaxSize}
               />
               <TextArea
                 className="sm:col-span-2"
@@ -103,12 +99,13 @@ export default function TaskForm(props: { task?: Task }) {
                 required={true}
                 value={description}
                 onChange={handleDescriptionEdition}
+                maxLength={descriptionMaxSize}
               />
             </div>
             <div className="mt-8 flex gap-4 sm:gap-6 justify-between">
               <Button
                 text="Cancelar"
-                onCLick={() => navigate("/")}
+                onCLick={onCancelOperation}
                 type="button"
               />
               <Button text="Crear tarea" color="green" type="submit" />
@@ -133,6 +130,7 @@ export default function TaskForm(props: { task?: Task }) {
                 required={true}
                 value={title}
                 onChange={handleTitleEdition}
+                maxLength={titleMaxSize}
               />
               <Checkbox
                 label="Completar tarea?"
@@ -150,12 +148,13 @@ export default function TaskForm(props: { task?: Task }) {
                 required={true}
                 value={description}
                 onChange={handleDescriptionEdition}
+                maxLength={descriptionMaxSize}
               />
             </div>
             <div className="mt-8 flex gap-4 sm:gap-6 justify-between">
               <Button
                 text="Cancelar"
-                onCLick={() => navigate(`/item/${task!.id}`)}
+                onCLick={onCancelOperation}
                 type="button"
               />
               <div className="flex gap-4">

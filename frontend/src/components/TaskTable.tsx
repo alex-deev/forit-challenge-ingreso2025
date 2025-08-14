@@ -41,7 +41,7 @@ export default function TaskTable(props: { tasks: Task[] }) {
       </table>
       {(tasks.length === 0) && (
         <div className="py-6 text-lg font-bold text-center bg-white dark:bg-gray-800">
-          No tienes ninguana tarea!
+          No hay ninguana tarea!
         </div>
       )}
     </div>
