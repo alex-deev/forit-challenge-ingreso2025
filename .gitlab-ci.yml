@@ -31,6 +31,7 @@ push-job:
     - echo "Logging into GitLab Container Registry..."
     - echo "$CI_DEPLOY_PASSWORD" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin
 
+    - echo "Loading previously building images..."
     - docker load < image-frontend.tar
     - docker load < image-backend.tar
 
