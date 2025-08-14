@@ -1,11 +1,10 @@
-
-stages:          # List of stages for jobs, and their order of execution
+stages: # List of stages for jobs, and their order of execution
   - build
   - push
 
 variables:
-  DOCKER_IMAGE_NAME_REACT: $CI_REGISTRY_IMAGE/web
-  DOCKER_IMAGE_NAME_NODE: $CI_REGISTRY_IMAGE/api
+  IMAGE_NAME_FRONTEND: $CI_REGISTRY_IMAGE/frontend
+  IMAGE_NAME_BACKEND: $CI_REGISTRY_IMAGE/backend
 
 build-job:
   stage: build
@@ -14,8 +13,14 @@ build-job:
     - docker:24.0.5-dind
   script:
     - echo "Building Docker images..."
-    - docker build -t $DOCKER_IMAGE_NAME_REACT:$CI_COMMIT_SHORT_SHA ./frontend
-    - docker build -t $DOCKER_IMAGE_NAME_NODE:$CI_COMMIT_SHORT_SHA ./backend
+    - docker build -t $IMAGE_NAME_FRONTEND:$CI_COMMIT_SHORT_SHA ./frontend
+    - docker build -t $IMAGE_NAME_BACKEND:$CI_COMMIT_SHORT_SHA ./backend
+    - docker save $IMAGE_NAME_FRONTEND > image-frontend.tar
+    - docker save $IMAGE_NAME_BACKEND > image-backend.tar
+  artifacts:
+    paths:
+      - image-frontend.tar
+      - image-backend.tar
 
 push-job:
   stage: push
@@ -24,14 +29,20 @@ push-job:
     - docker:24.0.5-dind
   script:
     - echo "Logging into GitLab Container Registry..."
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker login -u $CI_JOB_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+
+    - docker load < image-frontend.tar
+    - docker load < image-backend.tar
+
     - echo "Pushing images to registry..."
-    - docker push $DOCKER_IMAGE_NAME_REACT:$CI_COMMIT_SHORT_SHA
-    - docker push $DOCKER_IMAGE_NAME_NODE:$CI_COMMIT_SHORT_SHA
+    - docker push $IMAGE_NAME_FRONTEND:$CI_COMMIT_SHORT_SHA
+    - docker push $IMAGE_NAME_BACKEND:$CI_COMMIT_SHORT_SHA
+
     - echo "Pushing latest tags..."
-    - docker tag $DOCKER_IMAGE_NAME_REACT:$CI_COMMIT_SHORT_SHA $DOCKER_IMAGE_NAME_REACT:latest
-    - docker tag $DOCKER_IMAGE_NAME_NODE:$CI_COMMIT_SHORT_SHA $DOCKER_IMAGE_NAME_NODE:latest
-    - docker push $DOCKER_IMAGE_NAME_REACT:latest
-    - docker push $DOCKER_IMAGE_NAME_NODE:latest
+    - docker tag $IMAGE_NAME_FRONTEND:$CI_COMMIT_SHORT_SHA $IMAGE_NAME_FRONTEND:latest
+    - docker tag $IMAGE_NAME_BACKEND:$CI_COMMIT_SHORT_SHA $IMAGE_NAME_BACKEND:latest
+    - docker push $IMAGE_NAME_FRONTEND:latest
+    - docker push $IMAGE_NAME_BACKEND:latest
+
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
