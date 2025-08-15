@@ -1,5 +1,13 @@
 #!/bin/sh
 
+###############################################################################
+##
+##  Stricpt to add all environment variables with APP_ prefix inside a
+## 'config.js' file at the Nginx html servring directory.
+##  Then, 'config.js' gets requested by the web client to read the previously
+##  loaded variables. 
+##
+
 # Start the JSON object
 echo "window.config = {" > /usr/share/nginx/html/config.js
 
@@ -13,6 +21,9 @@ for env_var in $(printenv); do
 
     # Add the variable to the config.js file
     echo "  $key: \"$value\"," >> /usr/share/nginx/html/config.js
+
+    # Log output: var read
+    echo "script: variable $key added to config.js"
   fi
 done
 
