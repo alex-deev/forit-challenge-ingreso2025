@@ -1,3 +1,11 @@
+workflow:
+  rules:
+    ## Avoid running pipeline when a new repo tag is pushed
+    - if: $CI_COMMIT_TAG
+      when: never
+    ## Only run pipeline when the main branch changes
+    - if: $CI_COMMIT_BRANCH == "main"
+
 stages: # List of stages for jobs, and their order of execution
   - build
   - push
@@ -46,5 +54,3 @@ push-job:
 
     - docker logout
 
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
