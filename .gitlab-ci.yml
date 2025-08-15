@@ -27,10 +27,10 @@ push-job:
   image: docker:24.0.5
   services:
     - docker:24.0.5-dind
-  script:
-    - echo "Logging into GitLab Container Registry..."
+  before_script:
     - echo "$CI_DEPLOY_PASSWORD" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin
-
+  script:
+    - echo "Loading previously building images..."
     - docker load < image-frontend.tar
     - docker load < image-backend.tar
 
@@ -38,11 +38,13 @@ push-job:
     - docker push $IMAGE_NAME_FRONTEND:$CI_COMMIT_SHORT_SHA
     - docker push $IMAGE_NAME_BACKEND:$CI_COMMIT_SHORT_SHA
 
-    - echo "Pushing latest tags..."
+    - echo "Pushing latest tags...."
     - docker tag $IMAGE_NAME_FRONTEND:$CI_COMMIT_SHORT_SHA $IMAGE_NAME_FRONTEND:latest
     - docker tag $IMAGE_NAME_BACKEND:$CI_COMMIT_SHORT_SHA $IMAGE_NAME_BACKEND:latest
     - docker push $IMAGE_NAME_FRONTEND:latest
     - docker push $IMAGE_NAME_BACKEND:latest
+
+    - docker logout
 
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
