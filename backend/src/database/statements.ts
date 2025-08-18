@@ -1,7 +1,7 @@
 import DatabaseConstructor, { Database } from 'better-sqlite3';
 import { Task } from '../models/Task.model';
 
-const DB_LOCATION = '/sqlite/database.db';
+const DB_LOCATION = './database.db';
 console.log(`express: server is setting up SQLite database in path '${DB_LOCATION}'`);
 
 // Si el archivo no existe, lo creará automáticamente
@@ -38,8 +38,7 @@ export function updateTask(task: Task) {
     UPDATE tasks SET 
       title = @title,
       description = @description,
-      completed = @completed,
-      created_at = @createdAt 
+      completed = @completed
     WHERE id = @targetId;
   `;
   const plainTask = flattenTask(task);
