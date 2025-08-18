@@ -8,7 +8,7 @@ export default function TaskTable(props: { tasks: Task[] }) {
   const navigate = useNavigate();
 
   return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div className="relative overflow-x-auto shadow-md rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -24,7 +24,7 @@ export default function TaskTable(props: { tasks: Task[] }) {
             <th scope="col" className="px-6 py-3">
               Creado
             </th>
-            <th scope="col" className="text-center py-2">
+            <th scope="col" className="text-center py-2 px-2">
               <Button
                 text="Crear tarea"
                 color="green"

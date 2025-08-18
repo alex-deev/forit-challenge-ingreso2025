@@ -4,6 +4,7 @@ import TaskItem from "./pages/TaskItem";
 import TaskData from "./pages/TaskData";
 import NotFoundPage from "./pages/NotFoundPage";
 import TasksContextProvider from "./contexts/TasksContext";
+import { Footer } from "./components/Footer";
 
 const router = createBrowserRouter([
   { path: "/", element: <TaskList /> },
@@ -18,6 +19,7 @@ function App() {
   return (
     <TasksContextProvider>
       <RouterProvider router={router} />
+      <Footer />
     </TasksContextProvider>
   );
 }
