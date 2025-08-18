@@ -10,7 +10,13 @@ export default function TaskItem() {
   const currentTask = findTask(id);
   
   useEffect(() => {
-    fetchData(); // Refresca la lista de tareas consultando la API
+    fetchData(); // Refresco inicial, cada vez que se monta el componente
+  
+    const refreshData = setInterval(() => fetchData(), 5000); // Refresca la lista de tareas cada 5s
+
+    return () => {
+      clearInterval(refreshData); // Elimina el intervalo para limpiar memoria
+    }
   }, []);
 
   function findTask(id: string | undefined): Task | undefined {
